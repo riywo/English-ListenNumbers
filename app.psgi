@@ -35,5 +35,6 @@ builder {
         state => Plack::Session::State::Cookie->new(
             httponly => 1,
         );
+    enable 'Debug';
     English::ListenNumbers::Web->to_app();
 };

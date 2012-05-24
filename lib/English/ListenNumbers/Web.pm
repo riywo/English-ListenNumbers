@@ -19,8 +19,8 @@ use Text::Xslate;
         $view_conf->{path} = [ File::Spec->catdir(__PACKAGE__->base_dir(), 'tmpl') ];
     }
     my $view = Text::Xslate->new(+{
-        'syntax'   => 'TTerse',
-        'module'   => [ 'Text::Xslate::Bridge::Star' ],
+#        'syntax'   => 'TTerse',
+#        'module'   => [ 'Text::Xslate::Bridge::Star' ],
         'function' => {
             c => sub { Amon2->context() },
             uri_with => sub { Amon2->context()->req->uri_with(@_) },
@@ -48,6 +48,20 @@ use Text::Xslate;
 __PACKAGE__->load_plugins(
     'Web::FillInFormLite',
     'Web::CSRFDefender',
+);
+
+__PACKAGE__->load_plugin(
+    'Web::Auth',
+    {
+        module      => 'Twitter',
+        on_finished => sub {
+            my ($c, $access_token, $access_token_secret, $user_id, $screen_name)
+                    = @_;
+            $c->session->set('name' => $screen_name);
+            $c->session->set('site' => 'twitter');
+            return $c->redirect('/');
+        }
+    }
 );
 
 # for your security

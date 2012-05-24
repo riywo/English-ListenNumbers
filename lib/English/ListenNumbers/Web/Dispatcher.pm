@@ -6,10 +6,10 @@ use Amon2::Web::Dispatcher::Lite;
 
 any '/' => sub {
     my ($c) = @_;
-    $c->render('index.tt');
+    $c->render('index.tx');
 };
 
-post '/account/logout' => sub {
+any '/account/logout' => sub {
     my ($c) = @_;
     $c->session->expire();
     $c->redirect('/');
